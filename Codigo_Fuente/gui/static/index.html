@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lineamentos Lacruz - AI Pipeline</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .accordion-item { border-bottom: 1px solid var(--glass-border); margin-bottom: 0.5rem; }
+        .accordion-header { 
+            padding: 1rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+            background: rgba(255,255,255,0.03); border-radius: 0.75rem; transition: background 0.2s;
+        }
+        .accordion-header:hover { background: rgba(255,255,255,0.06); }
+        .accordion-content { padding: 1.25rem; display: none; }
+        .accordion-content.active { display: block; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .checkbox-group { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; font-size: 0.9rem; }
+        .checkbox-group input { width: auto; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <div class="logo-area">
+                <h1>LINEAMENTOS</h1>
+                <p>Advanced Geological Extraction v2.0</p>
+            </div>
+            <div class="status-bar">
+                <div class="status-item">Engine: Gemini 3 Flash</div>
+                <div class="status-item">Config: Full Access</div>
+            </div>
+        </header>
+
+        <aside class="controls-sidebar">
+            <div class="card" style="padding: 0.75rem;">
+                <!-- SECCIÓN 1: CORE -->
+                <div class="accordion-item">
+                    <div class="accordion-header" onclick="toggleAcc(this)">
+                        <span style="font-weight: 600;"><i data-lucide="database" style="width:16px"></i> Entradas / Salidas</span>
+                        <i data-lucide="chevron-down"></i>
+                    </div>
+                    <div class="accordion-content active">
+                        <div class="input-group">
+                            <label>DEM / Hillshade TIF</label>
+                            <input type="text" id="dem_path">
+                        </div>
+                        <div class="input-group">
+                            <label>MODO</label>
+                            <select id="mode">
+                                <option value="enhanced">Enhanced (PCA)</option>
+                                <option value="catalyst_replica">Catalyst Replica</option>
+                                <option value="batch">Batch Processing</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Directorio de Resultados</label>
+                            <input type="text" id="output_dir">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN 2: FEATURE STACK -->
+                <div class="accordion-item">
+                    <div class="accordion-header" onclick="toggleAcc(this)">
+                        <span style="font-weight: 600;"><i data-lucide="layers" style="width:16px"></i> Pre-procesamiento</span>
+                        <i data-lucide="chevron-right"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="grid-2">
+                            <div class="input-group">
+                                <label>PCA Component</label>
+                                <select id="pca_component">
+                                    <option value="1">PC1</option>
+                                    <option value="2">PC2 (Recomendado)</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>Factor Z</label>
+                                <input type="number" id="z_factor" step="0.1" value="1.0">
+                            </div>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="include_slope"> <label>Incluir Pendiente (Slope)</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="include_curvature"> <label>Incluir Curvatura</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN 3: ALGORITMO -->
+                <div class="accordion-item">
+                    <div class="accordion-header" onclick="toggleAcc(this)">
+                        <span style="font-weight: 600;"><i data-lucide="zap" style="width:16px"></i> Algoritmo (PCI Style)</span>
+                        <i data-lucide="chevron-right"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="input-group">
+                            <label>Detector</label>
+                            <select id="detector">
+                                <option value="canny">Canny</option>
+                                <option value="frangi">Frangi</option>
+                            </select>
+                        </div>
+                        <div class="grid-2">
+                            <div class="input-group">
+                                <label>LTHR (Min Curve)</label>
+                                <input type="number" id="lthr">
+                            </div>
+                            <div class="input-group">
+                                <label>FTHR (Fitting)</label>
+                                <input type="number" id="fthr">
+                            </div>
+                        </div>
+                        <div class="grid-2">
+                            <div class="input-group">
+                                <label>ATHR (Angle)</label>
+                                <input type="number" id="athr">
+                            </div>
+                            <div class="input-group">
+                                <label>DTHR (Link)</label>
+                                <input type="number" id="dthr">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECCIÓN 4: FILTROS FINALES -->
+                <div class="accordion-item">
+                    <div class="accordion-header" onclick="toggleAcc(this)">
+                        <span style="font-weight: 600;"><i data-lucide="filter" style="width:16px"></i> Post-procesamiento</span>
+                        <i data-lucide="chevron-right"></i>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="input-group">
+                            <label>Umbral Percentil</label>
+                            <input type="range" id="gthr" min="0" max="100">
+                            <div style="text-align:center; font-size:0.7rem" id="gthr-value">60</div>
+                        </div>
+                        <div class="input-group">
+                            <label>Longitud Mínima (m)</label>
+                            <input type="number" id="min_length">
+                        </div>
+                        <div class="input-group">
+                            <label>Dilation Radius (px)</label>
+                            <input type="number" id="dilation_radius">
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn-run" id="btn-run" style="margin: 1rem 0;">
+                    <i data-lucide="play"></i> Iniciar Proceso
+                </button>
+            </div>
+        </aside>
+
+        <main class="display-area">
+            <div class="card" style="flex: 1;">
+                <h2><i data-lucide="terminal"></i> Registro de Actividades</h2>
+                <div class="terminal" id="terminal">
+                    <span class="info">[SISTEMA] Modo configuración completa activado.</span><br>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/static/script.js"></script>
+    <script>
+        lucide.createIcons();
+        function toggleAcc(header) {
+            const content = header.nextElementSibling;
+            const icon = header.querySelector('[data-lucide^="chevron"]');
+            content.classList.toggle('active');
+            if(content.classList.contains('active')) {
+                icon.setAttribute('data-lucide', 'chevron-down');
+            } else {
+                icon.setAttribute('data-lucide', 'chevron-right');
+            }
+            lucide.createIcons();
+        }
+    </script>
+</body>
+</html>

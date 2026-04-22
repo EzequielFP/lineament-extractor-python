@@ -1,0 +1,33 @@
+========================================================================
+    SISTEMA DE EXTRACCIÓN AUTOMÁTICA DE LINEAMIENTOS - LA CRUZ
+========================================================================
+
+¡Hola! Este paquete contiene todo lo necesario para procesar Modelos 
+Digitales de Elevación (DEM) y extraer lineamientos geológicos de 
+forma automática.
+
+------------------------------------------------------------------------
+1. CÓMO USAR EL PROGRAMA (Para Usuarios)
+------------------------------------------------------------------------
+- Dirígete a la carpeta "ExtractorLineamentos".
+- Busca el archivo "ExtractorLineamentos.exe" y haz doble clic.
+- Se abrirá una ventana con todos los controles.
+- En la sección "Ejemplos" de este paquete tienes archivos .tif para probar.
+
+------------------------------------------------------------------------
+2. CÓMO USAR EL CÓDIGO (Para Programadores)
+------------------------------------------------------------------------
+- Si tienes Python instalado, puedes ver y modificar el código en la 
+  carpeta "Codigo_Fuente".
+- El núcleo del algoritmo está en "lineamientos_lacruz".
+- La interfaz gráfica está en "gui".
+
+------------------------------------------------------------------------
+3. REQUISITOS DE DATOS
+------------------------------------------------------------------------
+- El programa acepta archivos .tif (GeoTIFF).
+- Se recomienda que el DEM tenga una resolución adecuada (ej. 12.5m o 30m).
+
+------------------------------------------------------------------------
+Desarrollado con Antigravity AI
+------------------------------------------------------------------------
