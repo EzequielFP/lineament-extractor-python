@@ -1,4 +1,4 @@
-# Extractor de Lineamientos La Cruz
+# Extractor Automático de Lineamientos Geológicos
 
 Sistema de extracción automática de lineamientos geológicos a partir de Modelos Digitales de Elevación (DEM). Este proyecto utiliza algoritmos avanzados de procesamiento de imágenes para identificar estructuras geológicas lineales de forma eficiente.
 
