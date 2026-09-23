@@ -36,3 +36,8 @@ ExtractorLineamentos/Resultados/
 # Data
 *.tif
 !Ejemplos/*.tif
+
+# Lineamientos PRO
+Lineamientos_*_20??????_??????/
+*.log
+_md/

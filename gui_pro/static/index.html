@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lineamientos PRO</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand">
+      <svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true"><rect width="32" height="32" rx="7" fill="#14b8a6"/><path d="M5 24 L27 8 M7 12 L25 21 M11 27 L17 5" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg>
+      <div><h1>Lineamientos PRO</h1><span id="version">motor multi-evidencia</span></div>
+    </div>
+
+    <div class="scroll">
+      <section class="card">
+        <h2>1 · Datos</h2>
+        <label>DEM (GeoTIFF proyectado en metros)</label>
+        <div class="file"><input id="dem_path" placeholder="C:\...\dem.tif"><button data-pick="dem_path" data-kind="raster">…</button></div>
+        <label>Sombreado para réplica PCI <em>(opcional)</em></label>
+        <div class="file"><input id="hillshade_path" placeholder="vacío = se genera del DEM"><button data-pick="hillshade_path" data-kind="raster">…</button></div>
+        <label>Lineamientos de referencia <em>(opcional, valida)</em></label>
+        <div class="file"><input id="reference_path" placeholder="shp / gpkg"><button data-pick="reference_path" data-kind="vector">…</button></div>
+        <label>Datos estructurales de campo <em>(opcional: CSV/XLSX tipo, dir_buz, buzamiento)</em></label>
+        <div class="file"><input id="field_path" placeholder="diaclasas, foliaciones, fallas"><button data-pick="field_path" data-kind="table">…</button></div>
+        <label>Zona <em>(título de las láminas)</em></label>
+        <input id="zona" placeholder="p. ej. La Cruz">
+        <label>Carpeta de salida</label>
+        <div class="file"><input id="output_dir" placeholder="vacío = junto al DEM"><button data-pick="output_dir" data-kind="folder">…</button></div>
+      </section>
+
+      <section class="card">
+        <h2>2 · Modelos</h2>
+        <label>Preajuste</label>
+        <select id="preset"></select>
+        <p class="hint" id="preset_hint"></p>
+        <div id="models" class="models"></div>
+      </section>
+
+      <section class="card">
+        <h2>3 · Parámetros principales</h2>
+        <div class="slider"><label>Sensibilidad <b id="sensitivity_v"></b></label>
+          <input type="range" id="sensitivity" min="0" max="1" step="0.05"></div>
+        <p class="hint">Baja = solo estructuras claras. Alta = más lineamientos, más falsos positivos.</p>
+        <div class="row2">
+          <div><label>Longitud mínima (m)</label><input type="number" id="min_length_m" step="10" min="0"></div>
+          <div><label>Resolución de trabajo (m)</label><input type="number" id="work_res_m" step="0.5" min="0" title="0 = nativa"></div>
+        </div>
+        <div class="row2">
+          <div><label>Filtro de rectitud L (m)</label><input type="number" id="line_length_m" step="5" min="5"></div>
+          <div><label>Factor largo (×L)</label><input type="number" id="long_factor" step="0.5" min="0"></div>
+        </div>
+        <label>Escalas del relieve (m, separadas por coma)</label>
+        <input id="scales_m" placeholder="3, 6, 12, 24">
+      </section>
+
+      <details class="card adv">
+        <summary>Parámetros avanzados</summary>
+        <h3>Enlace de segmentos</h3>
+        <div class="row3">
+          <div><label>Hueco (m)</label><input type="number" id="link_gap_m" step="5"></div>
+          <div><label>Ángulo (°)</label><input type="number" id="link_angle_deg" step="1"></div>
+          <div><label>Lateral (m)</label><input type="number" id="link_lateral_m" step="1"></div>
+        </div>
+        <div class="row3">
+          <div><label>Ajuste (m)</label><input type="number" id="fit_tol_m" step="0.5"></div>
+          <div><label>Tol. angular (°)</label><input type="number" id="angle_tol_deg" step="1"></div>
+          <div><label>Orientaciones</label><input type="number" id="n_orient" step="2"></div>
+        </div>
+        <div class="row2">
+          <div><label>Soporte mínimo</label><input type="number" id="min_support" step="0.05" min="0" max="1"></div>
+          <div><label>Máx. familias</label><input type="number" id="max_families" step="1" min="1"></div>
+        </div>
+        <h3>Pesos del consenso</h3>
+        <div class="row4">
+          <div><label>Valles</label><input type="number" step="0.1" data-w="valles"></div>
+          <div><label>Crestas</label><input type="number" step="0.1" data-w="crestas"></div>
+          <div><label>Escarpes</label><input type="number" step="0.1" data-w="escarpes"></div>
+          <div><label>Bordes</label><input type="number" step="0.1" data-w="bordes"></div>
+        </div>
+        <h3>Drenaje y densidad</h3>
+        <label class="chk"><input type="checkbox" id="drainage"> Marcar lineamientos que siguen la red de drenaje</label>
+        <div class="row3">
+          <div><label>Cuenca mín. (m²)</label><input type="number" id="drainage_area_m2" step="1000"></div>
+          <div><label>Celda dens. (m)</label><input type="number" id="density_cell_m" step="5"></div>
+          <div><label>Radio dens. (m)</label><input type="number" id="density_radius_m" step="50"></div>
+        </div>
+        <label class="chk"><input type="checkbox" id="save_shapefiles"> Exportar también shapefiles</label>
+        <label class="chk"><input type="checkbox" id="save_evidence_rasters"> Guardar rásteres de respuesta</label>
+        <h3>Réplica PCI LINE (unidades PCI: píxeles / 0-255)</h3>
+        <div class="row3">
+          <div><label>RADI</label><input type="number" id="RADI"></div>
+          <div><label>GTHR</label><input type="number" id="GTHR"></div>
+          <div><label>LTHR</label><input type="number" id="LTHR"></div>
+        </div>
+        <div class="row3">
+          <div><label>FTHR</label><input type="number" id="FTHR"></div>
+          <div><label>ATHR</label><input type="number" id="ATHR"></div>
+          <div><label>DTHR</label><input type="number" id="DTHR"></div>
+        </div>
+        <div class="row2">
+          <div><label>Azimut sombreado (°)</label><input type="number" id="pci_azimuth"></div>
+          <div><label>Altitud (°)</label><input type="number" id="pci_altitude"></div>
+        </div>
+        <h3>Validación</h3>
+        <div class="row2">
+          <div><label>Buffer (m)</label><input type="number" id="val_buffer_m"></div>
+          <div><label>Tolerancia rumbo (°)</label><input type="number" id="val_angle_deg"></div>
+        </div>
+        <div class="row2 btns">
+          <button class="ghost" id="cfg_save">Guardar configuración</button>
+          <button class="ghost" id="cfg_load">Cargar configuración</button>
+        </div>
+      </details>
+    </div>
+
+    <div class="actions">
+      <button id="run" class="primary">Ejecutar</button>
+      <button id="cancel" class="ghost" disabled>Cancelar</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div class="progress"><div id="bar"></div></div>
+      <div class="stage"><span id="stage">Listo. Seleccione un DEM y pulse Ejecutar.</span><span id="elapsed"></span></div>
+    </div>
+    <nav class="tabs">
+      <button class="tab active" data-tab="mapa">Mapa</button>
+      <button class="tab" data-tab="resumen">Resumen</button>
+      <button class="tab" data-tab="figuras">Figuras</button>
+      <button class="tab" data-tab="registro">Registro</button>
+      <div class="spacer"></div>
+      <button class="ghost small" id="open_prev">Abrir corrida anterior</button>
+      <button class="ghost small" id="open_report" disabled>Reporte HTML</button>
+      <button class="ghost small" id="open_excel" disabled>Excel</button>
+      <button class="ghost small" id="open_folder" disabled>Carpeta</button>
+    </nav>
+
+    <section class="pane active" id="pane-mapa">
+      <div class="viewer">
+        <canvas id="map"></canvas>
+        <div class="empty" id="map_empty">Los resultados aparecerán aquí.</div>
+        <div class="legend" id="legend"></div>
+        <div class="info" id="info" hidden></div>
+      </div>
+      <div class="layers">
+        <h3>Capas</h3>
+        <div id="layer_list"></div>
+        <h3>Colorear por</h3>
+        <select id="color_by">
+          <option value="familia">Familia direccional</option>
+          <option value="confianza">Confianza</option>
+          <option value="modelo">Modelo</option>
+          <option value="tipo">Tipo de evidencia</option>
+        </select>
+        <h3>Confianza mínima <b id="conf_v">0.00</b></h3>
+        <input type="range" id="conf_min" min="0" max="1" step="0.05" value="0">
+        <label class="chk"><input type="checkbox" id="hide_drain"> Ocultar los que siguen drenaje</label>
+        <h3>Fondo</h3>
+        <input type="range" id="bg_alpha" min="0" max="1" step="0.05" value="1">
+        <button class="ghost small" id="fit">Ajustar vista</button>
+        <p class="hint">Rueda: zoom · arrastrar: mover · clic en una línea: atributos.</p>
+      </div>
+    </section>
+
+    <section class="pane" id="pane-resumen"><div class="content" id="resumen"><p class="hint">Sin resultados todavía.</p></div></section>
+    <section class="pane" id="pane-figuras"><div class="content figs" id="figuras"><p class="hint">Sin resultados todavía.</p></div></section>
+    <section class="pane" id="pane-registro"><pre class="log" id="log"></pre></section>
+  </main>
+</div>
+<div class="toast" id="toast" hidden></div>
+<script src="/static/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+﻿modelo;n;long_total_km;long_media_m;long_mediana_m;densidad_km_km2;n_conf_alta;familias;pct_long_drenaje
+consenso;178;24.318;136.6;122.1;1.73;55;F1 N48E, F2 N88W, F3 N01E, F4 N47W;29.9
+valles;88;12.57;142.8;128.2;0.894;29;F1 N49E, F2 N87E, F3 N51W, F4 N01E;52.0
+crestas;125;17.118;136.9;123.7;1.217;36;F1 N54E, F2 N85E, F3 N70W, F4 N44W;0.0
+escarpes;186;25.483;137.0;126.3;1.812;60;F1 N47E, F2 N83E, F3 N00W, F4 N70W;0.4
+bordes;348;47.417;136.3;123.2;3.372;104;F1 N48E, F2 N88E, F3 N48W, F4 N02E;21.9
+pci_line;2015;117.763;58.4;45.3;8.376;0;F1 N88W;
+pci_multi;10644;352.242;33.1;31.2;25.052;0;F1 N03E, F2 N49E, F3 N88W, F4 N43W;

@@ -1,0 +1,9 @@
+﻿modelo;contra;precision;recall;f1;rose_correlation;n_pred;n_ref;median_len_pred;median_len_ref
+consenso;referencia;0.648;0.119;0.2;0.387;178;5296;122.016;21.26
+valles;referencia;0.671;0.064;0.117;0.477;88;5296;128.25;21.26
+crestas;referencia;0.485;0.058;0.103;0.537;125;5296;123.695;21.26
+escarpes;referencia;0.349;0.072;0.119;0.443;186;5296;126.297;21.26
+bordes;referencia;0.574;0.194;0.29;0.287;348;5296;123.231;21.26
+pci_line;referencia;0.913;0.79;0.847;0.983;3697;5296;30.15;21.26
+pci_multi;referencia;0.464;0.828;0.595;-0.021;10644;5296;31.241;21.26
+consenso;pci_line;0.624;0.134;0.221;0.406;178;3697;122.016;30.15

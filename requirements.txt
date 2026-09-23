@@ -1,0 +1,18 @@
+# Lineamientos PRO
+numpy>=1.24
+scipy>=1.10
+opencv-python>=4.7        # o opencv-contrib-python
+scikit-image>=0.21
+scikit-learn>=1.3
+rasterio>=1.3
+geopandas>=0.14
+shapely>=2.0
+pyogrio>=0.7
+matplotlib>=3.7
+mplstereonet>=0.6         # estereogramas de datos de campo
+openpyxl>=3.1             # libro de Excel
+pillow>=9
+# interfaz
+fastapi>=0.100
+uvicorn>=0.23
+pywebview>=4.0

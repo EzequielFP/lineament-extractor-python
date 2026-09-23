@@ -1,0 +1,5 @@
+﻿familia;azimut_medio;rumbo;desv_circular;n;long_km;pct_long;long_media_m;long_max_m;tipo_dominante;confianza_media
+F1;48.2;N48E;9.9;140;19.75;41.7;141.1;763.8;borde;0.53
+F2;88.4;N88E;10.4;81;11.18;23.6;138.0;264.0;borde;0.59
+F3;132.4;N48W;11.6;81;10.46;22.1;129.1;203.3;borde;0.51
+F4;2.0;N02E;10.5;46;6.03;12.7;131.0;256.1;borde;0.57
